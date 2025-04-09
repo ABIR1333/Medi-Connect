@@ -114,10 +114,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                                    @if($appointment->status === 'completed') bg-green-100 text-green-800
-                                                                    @elseif($appointment->status === 'cancelled') bg-red-100 text-red-800
-                                                                    @else bg-yellow-100 text-yellow-800 @endif">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" style="background-color: {{$appointment->etat_appointment->couleur}}">
                                         {{ ucfirst($appointment->etat_appointment->etat) }}
                                     </span>
                                 </td>
@@ -174,7 +171,7 @@
                 <h5 class="text-xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">À venir cette semaine</h5>
                 <div class="space-y-3">
 
-                    @foreach(\App\Models\Appointment::with(['patient', 'user'])->whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->orderBy('date_appointment')->take(5)->get() as $appointment)
+                    @foreach(\App\Models\Appointment::with(['patient', 'user']) ->whereBetween('date_appointment', [today()->addDay(), today()->addDays(7)])->orderBy('date_appointment')->get() as $appointment)
                         <div class="flex items-center p-3 bg-gray-50 rounded-lg">
                             <div
                                 class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-teal-100 text-teal-600 rounded-lg">
@@ -182,13 +179,11 @@
                             </div>
                             <div class="ml-4">
                                 <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }}</div>
-                                <div class="text-xs text-gray-500">{{ $appointment->date_appointment->format('l') }} at
-                                    {{ $appointment->appointment_time }}
-                                </div>
+                                <div class="text-xs text-gray-500">{{ $appointment->date_appointment->format('l(d-m-y)') }}</div>
                             </div>
                             <div class="ml-auto">
-                                <div class="text-sm font-medium text-gray-900">Dr. {{ $appointment->user->name }}</div>
-                                <div class="text-xs text-gray-500">{{ $appointment->user->specialite->name ?? 'N/A' }}</div>
+                                <div class="text-sm font-medium text-gray-900">Dr. {{ $appointment->user->nom }}</div>
+                                <div class="text-xs text-gray-500">{{ $appointment->user->service->service ?? 'N/A' }}</div>
                             </div>
                         </div>
                     @endforeach
