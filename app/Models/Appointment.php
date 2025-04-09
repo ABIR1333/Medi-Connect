@@ -27,7 +27,7 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function etat()
+    public function etat_appointment()
     {
         return $this->belongsTo(EtatAppointment::class);
     }

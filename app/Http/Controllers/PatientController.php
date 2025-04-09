@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CoverturePatient;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
-    protected $villes = [
+    public static $villes = [
         "Agadir",
         "Al Hoceima",
         "Azilal",
@@ -43,7 +42,7 @@ class PatientController extends Controller
         "Tangier",
         "Zagora"
     ];
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -52,7 +51,7 @@ class PatientController extends Controller
         $patients = Patient::all(); // Récupère tous les patients
         return view('admin.patients.index', compact('patients')); // Retourne la vue avec les patients
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -61,7 +60,7 @@ class PatientController extends Controller
         $villes = $this->villes;
         return view('admin.patients.create',compact('villes')); // Retourne la vue de création
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
@@ -86,7 +85,7 @@ class PatientController extends Controller
 
         return redirect()->route('patients.index')->with('success', 'Patient créé avec succès.');
     }
-    
+
     /**
      * Display the specified resource.
      */

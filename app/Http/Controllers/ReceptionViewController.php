@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 class ReceptionViewController extends Controller
@@ -27,7 +29,32 @@ class ReceptionViewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $patient = Patient::firstOrCreate(
+            ['cin' => $request->cin],
+            [
+                'cin' => $request->cin,
+                'nom' => $request->nom,
+                'prenom' => $request->prenom,
+                'sexe' => $request->sexe ? 'Homme' : 'Femme',
+                'adresse' => $request->adresse,
+                'ville' => $request->ville,
+                'telephone' => $request->telephone,
+                'date_naissance' => $request->date_naissance,
+                'coverture_sante_id' => $request->coverture_sante_id ? $request->coverture_sante_id : null,
+                'identifiant' => $request->identifiant ? $request->identifiant : null
+            ]
+        );
+
+        Appointment::create([
+            'date_appointment'=>$request->date_appointment,
+            'etat_appointment_id' => 1,
+            'patient_id' => $patient->id,
+            'user_id' => $request->user_id,
+            'observation' => $request->observation,
+            'controle' => !$request->controle,
+        ]);
+
+        return redirect()->route(back());
     }
 
     /**

@@ -77,9 +77,9 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col"
+                            {{-- <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Time</th>
+                                Time</th> --}}
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Patient</th>
@@ -95,120 +95,112 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach(\App\Models\Appointment::with(['patient', 'medecin'])->whereDate('date_appointment', '=', today())->get() as $appointment)
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    {{-- <div class="text-sm font-medium text-gray-900">{{ $appointment->appointment_time }}
-                                                    </div> --}}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }}</div>
-                                                    {{-- <div class="text-sm text-gray-500">{{ $appointment->patient->email }}</div> --}}
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <div class="text-sm text-gray-900">{{ $appointment->medecin->nom }}</div>
-                                                    <div class="text-sm text-gray-500">
-                                                        {{ $appointment->medecin->service->service ?? 'N/A' }}
-                                                    </div>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap">
-                                                    <span
-                                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                                                                    @if($appointment->status === 'completed') bg-green-100 text-green-800 
-                                                                                                    @elseif($appointment->status === 'cancelled') bg-red-100 text-red-800 
-                                                                                                    @else bg-yellow-100 text-yellow-800 @endif">
-                                                        {{ ucfirst($appointment->status) }}
-                                                    </span>
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <button
-                                                        @click="$dispatch('open-modal', {content: `<div class='p-6'><h3 class='text-lg font-medium text-gray-900 mb-4'>Update Appointment Status</h3><form action='/reception/appointments/{{ $appointment->id }}/update-status' method='POST'><input type='hidden' name='_token' value='{{ csrf_token() }}'><div class='mb-4'><label class='block text-sm font-medium text-gray-700 mb-2'>Status</label><select name='status' class='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md'><option value='scheduled' {{ $appointment->status === 'scheduled' ? 'selected' : '' }}>Scheduled</option><option value='completed' {{ $appointment->status === 'completed' ? 'selected' : '' }}>Completed</option><option value='cancelled' {{ $appointment->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option></select></div><div class='mb-4'><label class='block text-sm font-medium text-gray-700 mb-2'>Notes</label><textarea name='notes' rows='3' class='shadow-sm focus:ring-teal-500 focus:border-teal-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md'>{{ $appointment->notes }}</textarea></div><div class='flex justify-end'><button type='button' @click=\"
-                                                        $dispatch('close-modal')\"
-                                                        class='bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 mr-3'>Cancel</button>
-                                                    <button type='submit'
-                                                        class='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500'>Update</button>
-                                </div>
-                                </form>
-                            </div>`})" class="text-teal-600 hover:text-teal-900 mr-3">Update</button>
-                            <a href="{{ route('appointments.show', $appointment) }}" class="text-blue-600 hover:text-blue-900">View</a>
-                            </td>
+                        @foreach(\App\Models\Appointment::with(['patient', 'user'])->whereDate('date_appointment', '=', today())->get() as $appointment)
+                            <tr>
+                                {{-- <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ $appointment->appointment_time }}
+                                    </div>
+                                </td> --}}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }}
+                                        {{ $appointment->patient->prenom }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ $appointment->user->nom }}</div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ $appointment->user->service->service ?? 'N/A' }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                                    @if($appointment->status === 'completed') bg-green-100 text-green-800
+                                                                    @elseif($appointment->status === 'cancelled') bg-red-100 text-red-800
+                                                                    @else bg-yellow-100 text-yellow-800 @endif">
+                                        {{ ucfirst($appointment->etat_appointment->etat) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('appointments.show', $appointment) }}"
+                                        class="text-blue-600 hover:text-blue-900">View</a>
+                                </td>
                             </tr>
                         @endforeach
-        @if(\App\Models\Appointment::whereDate('date_appointment', '=', today())->count() === 0)
-            <tr>
-                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                    No appointments scheduled for today.
-                </td>
-            </tr>
-        @endif
-        </tbody>
-        </table>
-    </div>
-</div>
-</div>
-
-<div class="bg-white overflow-hidden shadow-sm rounded-lg">
-    <div class="p-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Weekly Overview</h3>
-        <div class="grid grid-cols-7 gap-2">
-            @php
-                $startOfWeek = now()->startOfWeek();
-                $endOfWeek = now()->endOfWeek();
-                $currentDate = $startOfWeek->copy();
-            @endphp
-
-            @while($currentDate <= $endOfWeek)
-                        @php
-                            $isToday = $currentDate->isToday();
-                            $count = \App\Models\Appointment::whereDate('date_appointment', '=', $currentDate)->count();
-                        @endphp
-                        <div class="p-3 rounded-lg {{ $isToday ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50' }}">
-                            <div class="text-xs font-medium text-gray-500 uppercase">{{ $currentDate->format('D') }}</div>
-                            <div class="text-lg font-semibold {{ $isToday ? 'text-teal-600' : 'text-gray-800' }}">
-                                {{ $currentDate->format('d') }}
-                            </div>
-                            <div class="mt-1 text-sm {{ $count > 0 ? 'text-teal-600 font-medium' : 'text-gray-500' }}">
-                                {{ $count }} appt{{ $count !== 1 ? 's' : '' }}
-                            </div>
-                        </div>
-                        @php
-                            $currentDate->addDay();
-                        @endphp
-            @endwhile
-        </div>
-
-        <div class="mt-6">
-            <h4 class="text-md font-medium text-gray-800 mb-3">Upcoming This Week</h4>
-            <div class="space-y-3">
-
-                @foreach(\App\Models\Appointment::with(['patient', 'medecin'])->whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->orderBy('date_appointment')->take(5)->get() as $appointment)
-                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                        <div
-                            class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-teal-100 text-teal-600 rounded-lg">
-                            <span class="text-lg font-bold">{{ $appointment->date_appointment->format('d') }}</span>
-                        </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }}</div>
-                            <div class="text-xs text-gray-500">{{ $appointment->date_appointment->format('l') }} at
-                                {{ $appointment->appointment_time }}
-                            </div>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="text-sm font-medium text-gray-900">Dr. {{ $appointment->medecin->name }}</div>
-                            <div class="text-xs text-gray-500">{{ $appointment->medecin->specialite->name ?? 'N/A' }}</div>
-                        </div>
-                    </div>
-                @endforeach
-
-                @if(\App\Models\Appointment::whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->count() === 0)
-                    <div class="text-center text-sm text-gray-500 py-4">
-                        No upcoming appointments for the rest of the week.
-                    </div>
-                @endif
+                        @if(\App\Models\Appointment::whereDate('date_appointment', '=', today())->count() === 0)
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                                    No appointments scheduled for today.
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+        <div class="p-6">
+            {{-- <h3 class="text-lg font-semibold text-gray-800 mb-4">Weekly Overview</h3>
+            <div class="grid grid-cols-7 gap-2">
+                @php
+                    $startOfWeek = now()->startOfWeek();
+                    $endOfWeek = now()->endOfWeek();
+                    $currentDate = $startOfWeek->copy();
+                @endphp
+
+                @while($currentDate <= $endOfWeek)
+                    @php
+                        $isToday = $currentDate->isToday();
+                        $count = \App\Models\Appointment::whereDate('date_appointment', '=', $currentDate)->count();
+                    @endphp
+                    <div class="p-3 rounded-lg {{ $isToday ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50' }}">
+                        <div class="text-xs font-medium text-gray-500 uppercase">{{ $currentDate->format('D') }}</div>
+                        <div class="text-lg font-semibold {{ $isToday ? 'text-teal-600' : 'text-gray-800' }}">
+                            {{ $currentDate->format('d') }}
+                        </div>
+                        <div class="mt-1 text-sm {{ $count > 0 ? 'text-teal-600 font-medium' : 'text-gray-500' }}">
+                            {{ $count }} appt{{ $count !== 1 ? 's' : '' }}
+                        </div>
+                    </div>
+                    @php
+                        $currentDate->addDay();
+                    @endphp
+                @endwhile
+            </div> --}}
+
+            <div class="mt-6">
+                <h4 class="text-md font-medium text-gray-800 mb-3">Upcoming This Week</h4>
+                <div class="space-y-3">
+
+                    @foreach(\App\Models\Appointment::with(['patient', 'user'])->whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->orderBy('date_appointment')->take(5)->get() as $appointment)
+                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                            <div
+                                class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-teal-100 text-teal-600 rounded-lg">
+                                <span class="text-lg font-bold">{{ $appointment->date_appointment->format('d') }}</span>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }}</div>
+                                <div class="text-xs text-gray-500">{{ $appointment->date_appointment->format('l') }} at
+                                    {{ $appointment->appointment_time }}
+                                </div>
+                            </div>
+                            <div class="ml-auto">
+                                <div class="text-sm font-medium text-gray-900">Dr. {{ $appointment->user->name }}</div>
+                                <div class="text-xs text-gray-500">{{ $appointment->user->specialite->name ?? 'N/A' }}</div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @if(\App\Models\Appointment::whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->count() === 0)
+                        <div class="text-center text-sm text-gray-500 py-4">
+                            No upcoming appointments for the rest of the week.
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Main modal -->
@@ -221,21 +213,90 @@
             <div class="p-4 md:p-5 space-y-4">
                 <div class="p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Schedule New Appointment</h3>
-                    <form action="{{ route('appointments.store') }}" method="POST">
+                    <form action="{{ route('reception-view.store') }}" method="POST">
                         @csrf
-                        <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div class="grid gap-6 mb-6 md:grid-cols-2">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Patient</label>
-                                <select name="patient_id" required
-                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
-                                    <option value="">Select Patient</option>
-                                    @foreach(\App\Models\Patient::orderBy('nom')->orderBy('prenom')->get() as $patient)
-                                        <option value="{{ $patient->id }}">{{ $patient->nom }} {{ $patient->prenom }}
-                                        </option>
+                                <label for="cin" class="block mb-2 text-sm font-medium text-gray-900">CIN</label>
+                                <input type="text" id="cin" name="cin"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez votre cin" required />
+                            </div>
+                            <div>
+                                <label for="nom" class="block mb-2 text-sm font-medium text-gray-900">Nom</label>
+                                <input type="text" id="nom" name="nom"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez votre nom" required />
+                            </div>
+                            <div>
+                                <label for="prenom" class="block mb-2 text-sm font-medium text-gray-900">Prénom</label>
+                                <input type="text" id="prenom" name="prenom"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez votre prénom" required />
+                            </div>
+                            <div class="justify-center space-x-4">
+                                <label for="sexe" class="block mb-2 text-sm font-medium text-gray-900">Sexe</label>
+                                <label class="inline-flex items-center cursor-pointer pt-2">
+                                    <span class="ms-3 text-sm font-medium text-gray-900 mx-4 pb-1">Femme</span>
+                                    <input type="checkbox" name="sexe" class="sr-only peer">
+                                    <div
+                                        class="relative w-11 h-6 rounded-full peer bg-pink-600  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-blue-600 ">
+                                    </div>
+                                    <span class="ms-3 text-sm font-medium text-gray-900 pb-1">Homme</span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <label for="telephone"
+                                    class="block mb-2 text-sm font-medium text-gray-900">Téléphone</label>
+                                <input type="tel" id="telephone" name="telephone"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez votre numéro de téléphone" pattern="0[567][0-9]{8}" required />
+                            </div>
+                            <div>
+                                <label for="date_naissance" class="block mb-2 text-sm font-medium text-gray-900">date de
+                                    naissance</label>
+                                <input type="date" id="date_naissance" name="date_naissance"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    required />
+                            </div>
+                            <div>
+                                <label for="adresse"
+                                    class="block mb-2 text-sm font-medium text-gray-900">adresse</label>
+                                <input type="text" id="adresse" name="adresse"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez votre numéro de téléphone" required />
+                            </div>
+                            <div>
+                                <label for="ville" class="block mb-2 text-sm font-medium text-gray-900">ville</label>
+                                <select id="ville" name="ville"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                    <option selected>Choisir la ville</option>
+                                    @foreach (\App\Http\Controllers\PatientController::$villes as $ville)
+                                        <option value="{{$ville}}">{{$ville}}</option>
                                     @endforeach
                                 </select>
                             </div>
-
+                            <div>
+                                <label for="coverture_sante_id"
+                                    class="block mb-2 text-sm font-medium text-gray-900">Coverture sante</label>
+                                <select id="coverture_sante_id" name="coverture_sante_id"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                    <option selected>Choisir la Coverture</option>
+                                    @foreach (\App\Models\CovertureSante::all() as $coverture)
+                                        <option value="{{$coverture->id}}">{{$coverture->coverture}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="identifiant"
+                                    class="block mb-2 text-sm font-medium text-gray-900">identifiant</label>
+                                <input type="text" id="identifiant" name="identifiant"
+                                    class="disabled:bg-gray-200 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Entrez l'identifiant " />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 mb-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Service</label>
                                 <select id="service_id" name="service_id"
@@ -287,36 +348,49 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const service_id = document.getElementById('service_id');
-        const medecin_select = document.querySelector('select[name="medecin_id"]');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const service_id = document.getElementById('service_id');
+            const medecin_select = document.querySelector('select[name="medecin_id"]');
 
-        if (service_id && medecin_select) {
-            service_id.addEventListener('change', function () {
-                const selectedServiceId = this.value;
+            if (service_id && medecin_select) {
+                service_id.addEventListener('change', function () {
+                    const selectedServiceId = this.value;
 
-                // Clear current options
-                medecin_select.innerHTML = '<option value="">Sélectionnez un médecin</option>';
-                console.log(selectedServiceId)
-                if (selectedServiceId) {
-                    fetch(`/medecins-by-service/${selectedServiceId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(medecin => {
-                                const option = document.createElement('option');
-                                option.value = medecin.id;
-                                option.textContent = `${medecin.nom} ${medecin.prenom}`;
-                                medecin_select.appendChild(option);
+                    // Clear current options
+                    medecin_select.innerHTML = '<option value="">Sélectionnez un médecin</option>';
+                    console.log(selectedServiceId)
+                    if (selectedServiceId) {
+                        fetch(`/medecins-by-service/${selectedServiceId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                data.forEach(medecin => {
+                                    const option = document.createElement('option');
+                                    option.value = medecin.id;
+                                    option.textContent = `${medecin.nom} ${medecin.prenom}`;
+                                    medecin_select.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de la récupération des médecins :', error);
                             });
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors de la récupération des médecins :', error);
-                        });
-                }
-            });
-        }
-    });
-</script>
+                    }
+                });
+            }
+
+            const select = document.getElementById('coverture_sante_id');
+            const identifiantInput = document.getElementById('identifiant');
+
+            function toggleIdentifiant() {
+                const selectedText = select.options[select.selectedIndex].text.trim().toUpperCase();
+                identifiantInput.disabled = selectedText === 'PAYANT';
+            }
+
+            select.addEventListener('change', toggleIdentifiant);
+
+            // Trigger on page load in case a value is preselected
+            toggleIdentifiant();
+        });
+    </script>
 
 @endpush
