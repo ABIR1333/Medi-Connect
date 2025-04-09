@@ -3,7 +3,7 @@
         <div class="p-6 bg-gradient-to-r from-teal-500 to-teal-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">Today's Appointments</h3>
+                    <h3 class="text-lg font-semibold">Les rendez-vous d'aujourd'hui</h3>
                     <p class="text-3xl font-bold mt-2">
                         {{ \App\Models\Appointment::whereDate('date_appointment', '=', today())->count() }}
                     </p>
@@ -23,7 +23,7 @@
         <div class="p-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">This Week</h3>
+                    <h3 class="text-lg font-semibold">Rendez-vous de cette semaine</h3>
                     <p class="text-3xl font-bold mt-2">
                         {{ \App\Models\Appointment::whereBetween('date_appointment', [today()->addDay(), today()->addDays(7)])->count() }}
                     </p>
@@ -43,7 +43,7 @@
         <div class="p-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">Available Doctors</h3>
+                    <h3 class="text-lg font-semibold">Médecins disponibles</h3>
                     <p class="text-3xl font-bold mt-2">{{ \App\Models\User::where('role_id', 3)->count() }}</p>
                 </div>
                 <div class="bg-white bg-opacity-30 p-3 rounded-full">
@@ -69,7 +69,7 @@
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    New Appointment
+                    Nouvelle rendez-vous
                 </button>
             </div>
 
