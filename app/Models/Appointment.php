@@ -17,6 +17,10 @@ class Appointment extends Model
         'controle',
     ];
 
+    protected $casts = [
+        'date_appointment' => 'date', // or 'datetime' if it includes time
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
