@@ -54,7 +54,7 @@ class ReceptionViewController extends Controller
             'controle' => !$request->controle,
         ]);
 
-        return redirect()->route(back());
+        return redirect()->route('reception.dashboard');
     }
 
     /**
