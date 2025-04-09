@@ -3,7 +3,7 @@
         <div class="p-6 bg-gradient-to-r from-teal-500 to-teal-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">Today's Appointments</h3>
+                    <h3 class="text-lg font-semibold">Les rendez-vous d'aujourd'hui</h3>
                     <p class="text-3xl font-bold mt-2">
                         {{ \App\Models\Appointment::whereDate('date_appointment', '=', today())->count() }}
                     </p>
@@ -23,7 +23,7 @@
         <div class="p-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">This Week</h3>
+                    <h3 class="text-lg font-semibold">Rendez-vous de cette semaine</h3>
                     <p class="text-3xl font-bold mt-2">
                         {{ \App\Models\Appointment::whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->count() }}
                     </p>
@@ -43,7 +43,7 @@
         <div class="p-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-lg font-semibold">Available Doctors</h3>
+                    <h3 class="text-lg font-semibold">Médecins disponibles</h3>
                     <p class="text-3xl font-bold mt-2">{{ \App\Models\User::where('role_id', 3)->count() }}</p>
                 </div>
                 <div class="bg-white bg-opacity-30 p-3 rounded-full">
@@ -62,14 +62,15 @@
     <div class="bg-white overflow-hidden shadow-sm rounded-lg">
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">Today's Appointments</h3>
+                <h3 class="text-xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">Liste des rendez-vous</h3>
+
                 <button type="button" data-modal-target="default-modal" data-modal-toggle="default-modal"
                     class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    New Appointment
+                    Nouvelle rendez-vous
                 </button>
             </div>
 
@@ -170,7 +171,7 @@
             </div> --}}
 
             <div class="mt-6">
-                <h4 class="text-md font-medium text-gray-800 mb-3">Upcoming This Week</h4>
+                <h5 class="text-xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">À venir cette semaine</h5>
                 <div class="space-y-3">
 
                     @foreach(\App\Models\Appointment::with(['patient', 'user'])->whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->orderBy('date_appointment')->take(5)->get() as $appointment)
@@ -194,7 +195,7 @@
 
                     @if(\App\Models\Appointment::whereBetween('date_appointment', [now()->startOfWeek(), now()->endOfWeek()])->whereDate('date_appointment', '>', today())->count() === 0)
                         <div class="text-center text-sm text-gray-500 py-4">
-                            No upcoming appointments for the rest of the week.
+                            Aucun rendez-vous prévu pour le reste de la semaine.
                         </div>
                     @endif
                 </div>
@@ -212,7 +213,7 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
                 <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Schedule New Appointment</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Planifier un nouveau rendez-vous</h3>
                     <form action="{{ route('reception-view.store') }}" method="POST">
                         @csrf
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
