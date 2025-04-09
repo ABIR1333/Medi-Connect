@@ -2,19 +2,19 @@
 <html x-data>
 @include('reception.Layout.head')
 
-<body class="m-0 font-sans antialiased font-normal leading-default bg-gray-50 text-black">
-    <main class="relative h-screen transition-all duration-200 ease-in-out rounded-xl">
+<body class="m-0 font-sans antialiased font-normal leading-default bg-gray-50 pt-4 text-black">
+    @include('reception.Layout.navbar')
+    <main class="relative min-h-[calc(100dvh-120px)] transition-all duration-200 ease-in-out rounded-xl">
         <!-- Navbar -->
-        @include('reception.Layout.navbar')
         <!-- end Navbar -->
 
         <!-- cards -->
-        <div class="p-6 pb-0 mx-auto">
+        <div class="p-6 pb-0 mx-auto min-h-[calc(100dvh-120px)]">
             <!-- row 1 -->
             @yield('content')
-
+        </div>
+        <div class="">
             @include('reception.Layout.footer')
-
         </div>
         <!-- end cards -->
     </main>

@@ -1,4 +1,4 @@
-<nav class="relative flex rounded-lg bg-white shadow-lg flex-wrap items-center justify-between mx-6 mt-4 px-2 py-4 transition-all ease-in duration-250 lg:flex-nowrap lg:justify-start"
+<nav class="relative flex rounded-lg bg-white shadow-lg flex-wrap items-center justify-between mx-6 px-2 py-4 transition-all ease-in duration-250 lg:flex-nowrap lg:justify-start"
     navbar-main navbar-scroll="false">
     {{-- <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit"> --}}
         {{-- <h6 class="mb-0 font-bold text-black capitalize">@yield('mini title')</h6> --}}
