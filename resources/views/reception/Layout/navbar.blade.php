@@ -10,12 +10,48 @@
             <li class="flex items-center">
                 <span class="hidden sm:inline" style="font-family:Georgia, 'Times New Roman', Times, serif"><b>Bonjour {{Auth::user()->nom}} {{Auth::user()->prenom}}</b></span>
             </li>
-            <li class="flex gap-8">
+            {{-- <li class="flex gap-8 items-center" x-data="{open : false}">
                 <form action="{{route('logout')}}" method="post">
                     @csrf
                     <button>logout</button>
                 </form>
-                <i class="fa fa-user sm:mr-1"></i>
+                <i class="relative fa fa-user sm:mr-1" @click="open = true"></i>
+                <div x-show="open" class="absolute hidden">
+                    <span>hi</span>
+                    <p @click="open = false">close</p>
+                </div>
+            </li> --}}
+
+            <li class="relative flex items-center gap-4" x-data="{ open: false }">
+                <!-- User Icon - Toggle Button -->
+                <button @click="open = !open" class="flex items-center focus:outline-none">
+                    <i class="fa fa-user text-gray-600 hover:text-teal-600 transition-colors"></i>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div x-show="open"
+                     @click.away="open = false"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 top-5"
+                     style="display: none;">
+
+                    <div class="px-4 py-2 border-b border-gray-100">
+                        <span class="block text-sm text-gray-800">Bonjour, {{ Auth::user()->nom }}</span>
+                    </div>
+
+                    <form action="{{ route('logout') }}" method="POST" class="w-full">
+                        @csrf
+                        <button type="submit"
+                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </li>
 
             {{-- <li class="flex items-center pl-4 xl:hidden">

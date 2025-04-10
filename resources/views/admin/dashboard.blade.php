@@ -94,21 +94,21 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach(\App\Models\Appointment::with(['patient', 'medecin'])->latest()->take(5)->get() as $appointment)
+                                    @foreach(\App\Models\Appointment::with(['patient', 'user'])->latest()->take(5)->get() as $appointment)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->name }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }} {{ $appointment->patient->prenom }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">{{ $appointment->medecin->name }}</div>
-                                                <div class="text-sm text-gray-500">{{ $appointment->medecin->specialite->name ?? 'N/A' }}</div>
+                                                <div class="text-sm text-gray-900">{{ $appointment->user->nom }}</div>
+                                                <div class="text-sm text-gray-500">{{ $appointment->user->service->service }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="text-sm text-gray-900">{{ $appointment->date_appointment->format('M d, Y') }}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" style="background-color: {{$appointment->couleur}}">
-                                                    {{ ucfirst($appointment->etat) }}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" style="background-color: {{$appointment->etat_appointment->couleur}}">
+                                                    {{ ucfirst($appointment->etat_appointment->etat) }}
                                                 </span>
                                             </td>
                                         </tr>

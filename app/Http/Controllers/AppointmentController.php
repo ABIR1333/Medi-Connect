@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -10,10 +11,26 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::all()->sortByDesc('created_at');
-        return view('admin.appointments.index', compact('appointments'));
+        $appointments = Appointment::with(['patient', 'user'])
+            ->when($request->etat, function ($query, $etat) {
+                return $query->where('etat_appointment_id', $etat);
+            })
+            ->when($request->search, function ($query, $search) {
+                return $query->whereHas('patient', function ($q) use ($search) {
+                    $q->where('nom', 'like', "%{$search}%")
+                        ->orWhere('prenom', 'like', "%{$search}%")
+                        ->orWhere('cin', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('date_appointment', 'desc')
+            ->paginate(15)
+            ->withQueryString();
+
+        $doctors = User::where('role_id', 3)->get();
+
+        return view('admin.appointments.index', compact('appointments', 'doctors'));
     }
 
     /**
@@ -51,7 +68,7 @@ class AppointmentController extends Controller
     public function show($id)
     {
         $appointment = Appointment::findOrFail($id); // Recherche le rendez-vous
-        return view('appointments.show', compact('appointment')); // Retourne la vue avec les détails
+        return view('admin.appointments.show', compact('appointment')); // Retourne la vue avec les détails
     }
 
     /**
