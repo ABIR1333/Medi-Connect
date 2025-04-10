@@ -57,6 +57,8 @@ Route::middleware(['auth',\App\Http\Middleware\ReceptionMiddleware::class])->gro
     Route::get('/reception', [ReceptionViewController::class, 'index'])->name('reception.dashboard');
     Route::get('/reception/create', [ReceptionViewController::class, 'create'])->name('reception.create');
     Route::post('/reception',[ReceptionViewController::class,'store'])->name('reception-view.store');
+    Route::get('/reception/appointments/{id}',[ReceptionViewController::class,'show'])->name('reception-view.show');
+    Route::patch('/appointments/{appointment}/change-status', [AppointmentController::class, 'changeStatus'])->name('appointments.change-status');
 });
 
 require __DIR__.'/auth.php';

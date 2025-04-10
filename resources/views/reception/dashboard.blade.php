@@ -114,8 +114,9 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{$appointment->controle?'bg-red-300':'bg-green-400'}}">
-                                            {{ ucfirst($appointment->controle?'non':'oui') }}
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{$appointment->controle ? 'bg-red-300' : 'bg-green-400'}}">
+                                            {{ ucfirst($appointment->controle ? 'non' : 'oui') }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -125,7 +126,7 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ route('appointments.show', $appointment) }}"
+                                        <a href="{{ route('reception-view.show', $appointment->id) }}"
                                             class="text-blue-600 hover:text-blue-900">View</a>
                                     </td>
                                 </tr>
@@ -176,29 +177,75 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                const service_id = document.getElementById('service_id');
-                const medecin_select = document.querySelector('select[name="medecin_id"]');
-                if (service_id && medecin_select) {
-                    service_id.addEventListener('change', function () {
+                const serviceSelect = document.getElementById('service_id');
+                const doctorSelect = document.querySelector('select[name="user_id"]'); // Changed from medecin_id to user_id
+
+                if (serviceSelect && doctorSelect) {
+                    serviceSelect.addEventListener('change', function () {
                         const selectedServiceId = this.value;
-                        medecin_select.innerHTML = '<option value="">Sélectionnez un médecin</option>';
-                        console.log(selectedServiceId)
+
+                        // Clear existing options and set default
+                        doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+
                         if (selectedServiceId) {
-                            fetch(`/medecins-by-service/${selectedServiceId}`)
-                                .then(response => response.json())
+                            // Show loading state
+                            const loadingOption = document.createElement('option');
+                            loadingOption.textContent = 'Loading doctors...';
+                            loadingOption.disabled = true;
+                            doctorSelect.appendChild(loadingOption);
+
+                            // Get CSRF token
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+                            fetch(`/medecins-by-service/${selectedServiceId}`, {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRF-TOKEN': csrfToken
+                                }
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
                                 .then(data => {
-                                    data.forEach(medecin => {
-                                        const option = document.createElement('option');
-                                        option.value = medecin.id;
-                                        option.textContent = `${medecin.nom} ${medecin.prenom}`;
-                                        medecin_select.appendChild(option);
+                                    // Remove loading option
+                                    doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+
+                                    if (data.length === 0) {
+                                        const noDoctorOption = document.createElement('option');
+                                        noDoctorOption.textContent = 'No doctors available';
+                                        noDoctorOption.disabled = true;
+                                        doctorSelect.appendChild(noDoctorOption);
+                                        return;
+                                    }
+
+                                    data.forEach(doctor => {
+                                        const option = new Option(
+                                            `Dr. ${doctor.nom} ${doctor.prenom}`,
+                                            doctor.id
+                                        );
+                                        // Add data attributes if needed
+                                        option.dataset.service = doctor.service_id;
+                                        doctorSelect.add(option);
                                     });
                                 })
                                 .catch(error => {
-                                    console.error('Erreur lors de la récupération des médecins :', error);
+                                    console.error('Error fetching doctors:', error);
+                                    doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+                                    const errorOption = document.createElement('option');
+                                    errorOption.textContent = 'Error loading doctors';
+                                    errorOption.disabled = true;
+                                    doctorSelect.appendChild(errorOption);
                                 });
                         }
                     });
+
+                    // Trigger change event if a service is already selected
+                    if (serviceSelect.value) {
+                        serviceSelect.dispatchEvent(new Event('change'));
+                    }
                 }
                 const select = document.getElementById('coverture_sante_id');
                 const identifiantInput = document.getElementById('identifiant');
