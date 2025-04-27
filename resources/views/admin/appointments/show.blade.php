@@ -34,9 +34,7 @@
                             <p class="text-lg font-semibold">
                                 {{ $appointment->date_appointment->format('d/m/Y') }}
                             </p>
-                            <p class="text-sm text-gray-500">
-                                {{ $appointment->date_appointment->format('H:i') }}
-                            </p>
+
                         </div>
 
                         <div>
@@ -61,22 +59,12 @@
                         <div>
                             <p class="text-sm font-medium text-gray-500">Créé le</p>
                             <p class="text-sm">
-                                {{ $appointment->created_at->format('d/m/Y H:i') }}
+                                {{ $appointment->created_at->format('d/m/Y') }}
                             </p>
                         </div>
                     </div>
 
-                    <!-- Notes Section -->
-                    <div class="mt-6">
-                        <p class="text-sm font-medium text-gray-500">Notes</p>
-                        <div class="mt-1 p-4 bg-white rounded-md border border-gray-200">
-                            @if($appointment->notes)
-                                {{ $appointment->notes }}
-                            @else
-                                <span class="text-gray-400">Aucune note enregistrée</span>
-                            @endif
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <!-- Patient Info -->
@@ -115,7 +103,7 @@
                         <div>
                             <p class="text-sm font-medium text-gray-500">Couverture Santé</p>
                             <p class="text-lg">
-                                {{ $appointment->patient->coverture_sante->coverture ?? 'Aucune' }}
+                                {{ $appointment->patient->covertureSante->coverture ?? 'Aucune' }}
                                 @if($appointment->patient->identifiant)
                                     ({{ $appointment->patient->identifiant }})
                                 @endif
@@ -190,38 +178,7 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
-
-                        <!-- Reschedule -->
-                        <div class="p-4 bg-white rounded-md border border-gray-200">
-                            <h4 class="font-medium text-gray-700 mb-2">Reprogrammer</h4>
-                            <form action="{{ route('appointments.reschedule', $appointment) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <div class="flex items-center gap-2">
-                                    <input type="date" name="new_date"
-                                           value="{{ $appointment->date_appointment->format('Y-m-d') }}"
-                                           class="flex-1 border-gray-300 rounded-md">
-                                    <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                                        <i class="fas fa-calendar-check"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Add Note -->
-                        <div class="p-4 bg-white rounded-md border border-gray-200 md:col-span-2">
-                            <h4 class="font-medium text-gray-700 mb-2">Ajouter une note</h4>
-                            <form action="{{ route('appointments.add-note', $appointment) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <textarea name="notes" rows="2" class="w-full border-gray-300 rounded-md mb-2"
-                                          placeholder="Ajoutez des notes ici...">{{ $appointment->notes }}</textarea>
-                                <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
-                                    <i class="fas fa-edit mr-1"></i> Enregistrer
-                                </button>
-                            </form>
-                        </div>
+                        </div>                        
                     </div>
 
                     <!-- Danger Zone -->

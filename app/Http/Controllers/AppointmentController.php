@@ -128,4 +128,5 @@ class AppointmentController extends Controller
 
         return back()->with('success', 'Appointment status updated successfully!');
     }
+
 }

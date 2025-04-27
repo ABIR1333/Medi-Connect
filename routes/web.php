@@ -36,10 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::patch('/appointments/{appointment}/change-status', [AppointmentController::class, 'changeStatus'])->name('appointments.change-status');
-    // Reschedule
-    Route::patch('/appointments/{appointment}/reschedule', [AppointmentController::class, 'reschedule'])->name('appointments.reschedule');
-    // Add note
-    Route::patch('/appointments/{appointment}/add-note', [AppointmentController::class, 'addNote'])->name('appointments.add-note');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {

@@ -6,7 +6,7 @@
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
                 <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Schedule New Appointment</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Planifier un nouveau rendez-vous</h3>
                     <form action="{{ route('reception-view.store') }}" method="POST">
                         @csrf
                         <div class="grid gap-6 mb-6 md:grid-cols-2">
@@ -73,7 +73,7 @@
                             </div>
                             <div>
                                 <label for="coverture_sante_id"
-                                    class="block mb-2 text-sm font-medium text-gray-900">Coverture sante</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900">Couverture santé</label>
                                 <select id="coverture_sante_id" name="coverture_sante_id"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                                     <option selected>Choisir la Coverture</option>
@@ -95,7 +95,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Service</label>
                                 <select id="service_id" name="service_id"
                                     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
-                                    <option value="">All Specialties</option>
+                                    <option value="">Toutes les spécialités</option>
                                     @foreach(\App\Models\Service::orderBy('service')->get() as $service)
                                         <option value="{{ $service->id }}">{{ $service->service }}</option>
                                     @endforeach
@@ -103,10 +103,10 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Doctor</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Docteur</label>
                                 <select name="user_id" required
                                     class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md">
-                                    <option value="">Select Doctor</option>
+                                    <option value="">Sélectionner un médecin</option>
                                     @foreach(\App\Models\User::where('role_id', '=', 3)->get() as $medecin)
                                         <option value="{{ $medecin->id }}" data-service="{{ $medecin->service_id }}">
                                             Dr.{{ $medecin->nom }}</option>
@@ -127,11 +127,11 @@
                         <div class="flex justify-end">
                             <button type="button" data-modal-hide="default-modal"
                                 class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 mr-3">
-                                Cancel
+                               Annuler
                             </button>
                             <button type="submit"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                Schedule Appointment
+                                Planifier un rendez-vous
                             </button>
                         </div>
                     </form>

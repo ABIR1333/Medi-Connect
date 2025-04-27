@@ -51,20 +51,10 @@
 <div class="mt-8 min-h-[calc(100vh-20rem)]">
     <div class="bg-white overflow-hidden shadow-sm rounded-lg">
         <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Today's Schedule</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Rendez-vous d'aujourdhui</h3>
             <div x-data="{ date: '{{ now()->format('Y-m-d') }}' }" class="mb-4">
                 <div class="flex items-center space-x-4">
-                    <button @click="date = '{{ now()->subDay()->format('Y-m-d') }}'" class="p-2 rounded-full hover:bg-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <div class="text-lg font-medium text-gray-900" x-text="new Date(date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})"></div>
-                    <button @click="date = '{{ now()->addDay()->format('Y-m-d') }}'" class="p-2 rounded-full hover:bg-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+                    <div class="text-lg font-medium text-gray-900" x-text="new Date(date).toLocaleDateString('fr-FR', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})"></div>
                 </div>
             </div>
             
@@ -72,53 +62,31 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200" x-data="{ appointments: [] }" x-init="
-                        fetch(`/api/medecin/appointments?date=${date}`)
-                            .then(response => response.json())
-                            .then(data => { appointments = data })
-                    " x-effect="
-                        fetch(`/api/medecin/appointments?date=${date}`)
-                            .then(response => response.json())
-                            .then(data => { appointments = data })
-                    ">
-                        <template x-for="appointment in appointments" :key="appointment.id">
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @forelse(\App\Models\Appointment::where('user_id',Auth::id())->whereDate('date_appointment',now())->get() as $appointment)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900" x-text="appointment.appointment_time"></div>
+                                    <div class="text-sm font-medium text-gray-900">{{$appointment->patient->nom}} {{$appointment->patient->prenom}}</div>
+                                    <div class="text-sm text-gray-500">{{$appointment->patient->telephone}}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900" x-text="appointment.patient.name"></div>
-                                    <div class="text-sm text-gray-500" x-text="appointment.patient.email"></div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                        :class="{
-                                            'bg-green-100 text-green-800': appointment.status === 'completed',
-                                            'bg-yellow-100 text-yellow-800': appointment.status === 'scheduled',
-                                            'bg-red-100 text-red-800': appointment.status === 'cancelled'
-                                        }"
-                                        x-text="appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" style="background-color: {{$appointment->etat_appointment->couleur}}">
+                                        {{$appointment->etat_appointment->etat}}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button @click="$dispatch('open-modal', {content: `<div class='p-6'><h3 class='text-lg font-medium text-gray-900 mb-4'>Update Appointment Status</h3><form action='/appointments/${appointment.id}/update-status' method='POST'><input type='hidden' name='_token' value='{{ csrf_token() }}'><div class='mb-4'><label class='block text-sm font-medium text-gray-700 mb-2'>Status</label><select name='status' class='mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm rounded-md'><option value='scheduled'>Scheduled</option><option value='completed'>Completed</option><option value='cancelled'>Cancelled</option></select></div><div class='mb-4'><label class='block text-sm font-medium text-gray-700 mb-2'>Notes</label><textarea name='notes' rows='3' class='shadow-sm focus:ring-teal-500 focus:border-teal-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md'>${appointment.notes || ''}</textarea></div><div class='flex justify-end'><button type='button' @click=\"$dispatch('close-modal')\" class='bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 mr-3'>Cancel</button><button type='submit' class='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500'>Update</button></div></form></div>`})" class="text-teal-600 hover:text-teal-900 mr-3">Update</button>
-                                    <a :href="`/appointments/${appointment.id}`" class="text-blue-600 hover:text-blue-900">View</a>
-                                </td>
+
                             </tr>
-                        </template>
-                        <template x-if="appointments.length === 0">
+                            @empty
                             <tr>
                                 <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
                                     No appointments scheduled for this day.
                                 </td>
                             </tr>
-                        </template>
+                            @endforelse
                     </tbody>
                 </table>
             </div>

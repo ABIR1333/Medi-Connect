@@ -8,7 +8,7 @@
             <a class="inline-block px-8 py-2 mb-0 mr-4 text-xs font-bold text-center text-blue-500 uppercase align-middle transition-all ease-in bg-transparent border border-blue-500 border-solid rounded-lg shadow-none cursor-pointer leading-pro hover:-translate-y-px active:shadow-xs hover:border-blue-500 active:bg-blue-500 active:hover:text-blue-500 hover:text-blue-500 tracking-tight-rem hover:bg-transparent hover:opacity-75 hover:shadow-none active:text-white active:hover:bg-transparent" target="_blank" href="https://www.creative-tim.com/builder/soft-ui?ref=navbar-dashboard&amp;_ga=2.76518741.1192788655.1647724933-1242940210.1644448053">Online Builder</a>
           </li> -->
             <li class="flex items-center">
-                <span class="hidden sm:inline" style="font-family:Georgia, 'Times New Roman', Times, serif"><b>Bonjour {{Auth::user()->nom}} {{Auth::user()->prenom}}</b></span>
+                <span style="font-family:Georgia, 'Times New Roman', Times, serif"><b>Bonjour {{Auth::user()->nom}} {{Auth::user()->prenom}}</b></span>
             </li>
             {{-- <li class="flex gap-8 items-center" x-data="{open : false}">
                 <form action="{{route('logout')}}" method="post">
@@ -39,11 +39,6 @@
                      x-transition:leave-end="opacity-0 scale-95"
                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 top-5"
                      style="display: none;">
-
-                    <div class="px-4 py-2 border-b border-gray-100">
-                        <span class="block text-sm text-gray-800">Bonjour, {{ Auth::user()->nom }}</span>
-                    </div>
-
                     <form action="{{ route('logout') }}" method="POST" class="w-full">
                         @csrf
                         <button type="submit"

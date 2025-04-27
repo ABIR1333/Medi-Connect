@@ -54,7 +54,6 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Patient</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Etat</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                                 </tr>
                             </thead>
@@ -63,7 +62,6 @@
                                     <tr>
                                         <td class="px-6 py-4">
                                             <div class="text-sm font-medium text-gray-900">{{ $appointment->date_appointment->format('d/m/Y') }}</div>
-                                            <div class="text-sm text-gray-500">{{ $appointment->date_appointment->format('H:i') }}</div>
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="text-sm font-medium text-gray-900">{{ $appointment->patient->nom }} {{ $appointment->patient->prenom }}</div>
@@ -74,9 +72,6 @@
                                                   style="background-color: {{$appointment->etat_appointment->couleur}}; color: {{$appointment->etat_appointment->text_color ?? '#fff'}}">
                                                 {{ $appointment->etat_appointment->etat }}
                                             </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
-                                            {{ $appointment->notes ? Str::limit($appointment->notes, 50) : 'Aucune note' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm font-medium">
                                             <div class="flex items-center space-x-2">

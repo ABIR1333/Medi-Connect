@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+class PasswordUpdateRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,11 +16,10 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $this->user()->id, // Exclude current user's email from the unique check
-            'telephone' => 'nullable|string|max:255',
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:8|confirmed', // Minimum 8 characters and confirmation
         ];
     }
+    
     
 }

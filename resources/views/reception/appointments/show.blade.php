@@ -130,7 +130,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-500">Health Coverage</p>
                         <p class="text-lg">
-                            {{ $appointment->patient->coverture->coverture ?? 'None' }}
+                            {{ $appointment->patient->covertureSante->coverture ?? 'None' }}
                             @if($appointment->patient->identifiant)
                                 (ID: {{ $appointment->patient->identifiant }})
                             @endif

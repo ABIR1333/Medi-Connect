@@ -67,7 +67,7 @@
         <div class="bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Today's Appointments {{today()->format('d/m')}} </h3>
+                    <h3 class="text-lg font-semibold text-gray-800">Rendez-vous d'aujourdhui {{today()->format('d/m')}} </h3>
                     <button type="button" data-modal-target="default-modal" data-modal-toggle="default-modal"
                         class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
@@ -133,7 +133,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                                        No appointments scheduled for today.
+                                        Aucun rendez-vous aujourd'hui
                                     </td>
                                 </tr>
                             @endforelse
@@ -145,7 +145,7 @@
 
         <div class="bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">Upcoming This Week {{today()->addDay()->format('d/m')}}
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">Rendez-vous de cette semaine {{today()->addDay()->format('d/m')}}
                     - {{ today()->addDays(7)->format('d/m')}}</h3>
                 <div class="space-y-3">
                     @forelse(\App\Models\Appointment::with(['patient', 'user'])->whereBetween('date_appointment', [today()->addDay(), today()->addDays(7)])->orderBy('date_appointment')->get() as $appointment)
@@ -166,7 +166,7 @@
                         </div>
                     @empty
                         <div class="text-center text-sm text-gray-500 py-4">
-                            No upcoming appointments for the rest of the week.
+                            Aucun rendez-vous cette semaine
                         </div>
                     @endforelse
                 </div>

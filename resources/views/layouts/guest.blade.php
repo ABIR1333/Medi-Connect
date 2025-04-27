@@ -20,9 +20,7 @@
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 w-full" style="background-image: url('bgd.jpg');background-repeat:no-repeat;background-position:center;background-size: cover;">
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 shadow-md overflow-hidden sm:rounded-lg backdrop-blur-md" style="background-color: #e3f2fd50">
             <div class="w-full flex justify-center mt-4 mb-6">
-                <a href="/" class="w-min">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
+                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
             </div>
 
             {{ $slot }}
